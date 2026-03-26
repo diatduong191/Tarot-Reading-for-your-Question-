@@ -1,522 +1,670 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tarot Reading</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Tarot Oracle | Reading for NotebookLM</title>
   <style>
-    :root{
-      --bg:#0f1115; --panel:#151922; --panel2:#10141c; --line:#252b38;
-      --text:#e8ecf4; --muted:#9aa4b2; --accent:#c7a76c; --good:#8fd3a8;
-      --shadow:0 20px 60px rgba(0,0,0,.35);
-      --radius:22px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(199,167,108,.16), transparent 55%),
-        radial-gradient(900px 600px at 80% 0%, rgba(143,211,168,.10), transparent 40%),
-        linear-gradient(180deg, #0b0d12 0%, #0f1115 100%);
-      color:var(--text);
-      min-height:100vh;
+
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(30, 35, 48, 1) 0%, #0a0c14 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      color: #edeef2;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
     }
-    .wrap{max-width:1200px; margin:0 auto; padding:32px 18px 48px;}
-    .hero{
-      display:grid; gap:18px; grid-template-columns: 1.25fr .75fr; align-items:stretch;
-      margin-bottom:18px;
+
+    /* container mềm mại */
+    .app-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
     }
-    .card, .panel{
-      background:rgba(21,25,34,.88);
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow:var(--shadow);
-      border-radius:var(--radius);
-      backdrop-filter: blur(14px);
+
+    /* header + thông số */
+    .hero-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: space-between;
+      align-items: stretch;
     }
-    .hero .card{padding:24px;}
-    .hero h1{margin:0 0 8px; font-size:clamp(28px, 4vw, 46px); letter-spacing:-.04em;}
-    .hero p{margin:0; color:var(--muted); line-height:1.65; max-width:62ch;}
-    .stats{display:grid; gap:12px; grid-template-columns:1fr 1fr;}
-    .stat{padding:18px; border-radius:18px; background:rgba(16,20,28,.9); border:1px solid rgba(255,255,255,.05)}
-    .stat .label{color:var(--muted); font-size:13px; margin-bottom:8px}
-    .stat .value{font-size:26px; font-weight:700; letter-spacing:-.03em}
-    .layout{display:grid; gap:18px; grid-template-columns: 360px 1fr;}
-    .panel{padding:18px;}
-    .group{margin-bottom:16px}
-    .group:last-child{margin-bottom:0}
-    label{display:block; font-size:13px; color:var(--muted); margin-bottom:8px}
-    input, select, button, textarea{
-      width:100%; border-radius:16px; border:1px solid var(--line); background:var(--panel2);
-      color:var(--text); padding:12px 14px; font:inherit; outline:none;
+
+    .brand-card {
+      background: rgba(18, 22, 32, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(210, 180, 140, 0.25);
+      border-radius: 2rem;
+      padding: 1.6rem 2rem;
+      flex: 2;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
     }
-    input:focus, select:focus, textarea:focus{border-color:rgba(199,167,108,.65); box-shadow:0 0 0 3px rgba(199,167,108,.12)}
-    textarea{min-height:118px; resize:vertical; line-height:1.55}
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    .btns{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    button{cursor:pointer; font-weight:650; transition:.18s transform ease, .18s opacity ease, .18s border-color ease}
-    button:hover{transform:translateY(-1px)}
-    .primary{background:linear-gradient(135deg, rgba(199,167,108,.95), rgba(176,136,72,.95)); color:#151922; border-color:transparent}
-    .secondary{background:rgba(255,255,255,.03)}
-    .danger{background:rgba(255,118,118,.08); border-color:rgba(255,118,118,.18)}
-    .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-    .pill{font-size:12px; color:var(--muted); padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06)}
-    .reading{display:grid; gap:14px}
-    .reading-head{padding:18px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start}
-    .reading-head h2{margin:0 0 6px; font-size:20px}
-    .reading-head .sub{color:var(--muted); line-height:1.6}
-    .spread{display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));}
-    .tarot-card{
-      padding:16px; border-radius:20px; background:linear-gradient(180deg, rgba(16,20,28,.96), rgba(12,15,22,.96));
-      border:1px solid rgba(255,255,255,.06);
-      min-height:230px; display:flex; flex-direction:column; justify-content:space-between;
+
+    .stats-card {
+      background: rgba(18, 22, 32, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(210, 180, 140, 0.2);
+      border-radius: 2rem;
+      padding: 1rem 1.8rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem;
     }
-    .tarot-card .top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:14px}
-    .tarot-card .index{font-size:12px; color:var(--muted)}
-    .tarot-card .name{font-size:18px; font-weight:700; letter-spacing:-.02em; margin-top:2px}
-    .tarot-card .ori{font-size:12px; color:var(--accent); margin-top:4px}
-    .tarot-card .body{color:var(--text); line-height:1.65; font-size:14px}
-    .tarot-card .kw{margin-top:12px; color:var(--muted); font-size:12px; line-height:1.6}
-    .empty{
-      padding:26px; text-align:center; color:var(--muted); border:1px dashed rgba(255,255,255,.10); border-radius:20px;
-      background:rgba(255,255,255,.02);
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #e9d6b0, #c7a76c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
     }
-    .small{font-size:12px; color:var(--muted); line-height:1.55}
-    @media (max-width: 960px){ .hero, .layout{grid-template-columns:1fr} }
+
+    .tagline {
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      min-width: 70px;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9ca3af;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e2dccd;
+      line-height: 1.2;
+    }
+
+    /* layout chính 2 cột */
+    .two-columns {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.8rem;
+    }
+
+    /* sidebar */
+    .sidebar {
+      background: rgba(12, 16, 24, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 1.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      height: fit-content;
+    }
+
+    .input-group {
+      margin-bottom: 1.4rem;
+    }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #bcae7c;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: #0f111a;
+      border: 1px solid #2a2e3c;
+      border-radius: 1.2rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #f0f2f8;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #c7a76c;
+      box-shadow: 0 0 0 2px rgba(199, 167, 108, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.8rem;
+      margin: 1.2rem 0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(105deg, #c7a76c, #b48b4a);
+      border: none;
+      color: #14181f;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(199, 167, 108, 0.3);
+    }
+
+    .btn-secondary {
+      background: #1e2432;
+      border: 1px solid #333a48;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-secondary:hover {
+      background: #2a3142;
+      border-color: #c7a76c;
+    }
+
+    .small-note {
+      font-size: 0.7rem;
+      color: #7c8598;
+      margin-top: 0.6rem;
+      text-align: center;
+    }
+
+    /* main content */
+    .main-panel {
+      background: rgba(12, 16, 24, 0.65);
+      backdrop-filter: blur(8px);
+      border-radius: 1.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(199, 167, 108, 0.3);
+    }
+
+    .pill {
+      background: #1b212e;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      color: #cdd1dc;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin: 1.5rem 0;
+    }
+
+    .tarot-card-ui {
+      background: linear-gradient(145deg, #121724, #0b0f18);
+      border-radius: 1.5rem;
+      padding: 1rem;
+      border: 1px solid #2d3343;
+      transition: all 0.2s;
+    }
+
+    .card-orient {
+      display: inline-block;
+      font-size: 0.7rem;
+      background: #2a2e3c;
+      padding: 0.2rem 0.6rem;
+      border-radius: 30px;
+      margin-top: 0.4rem;
+    }
+
+    .card-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      margin: 0.5rem 0 0.2rem;
+    }
+
+    .meaning-text {
+      font-size: 0.8rem;
+      color: #cbd5e6;
+      margin: 0.8rem 0;
+      line-height: 1.45;
+    }
+
+    .interpret-box {
+      background: #0c0f18cc;
+      border-radius: 1.4rem;
+      padding: 1.3rem;
+      margin-top: 1.2rem;
+      border-left: 4px solid #c7a76c;
+    }
+
+    pre.export-area {
+      background: #080b10;
+      padding: 1rem;
+      border-radius: 1.2rem;
+      font-size: 0.75rem;
+      font-family: 'SF Mono', monospace;
+      white-space: pre-wrap;
+      margin-top: 1rem;
+      border: 1px solid #2d2f3a;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    @media (max-width: 800px) {
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+      body {
+        padding: 1rem;
+      }
+      .stats-card {
+        justify-content: space-evenly;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <div class="card">
-        <h1>Tarot Reading</h1>
-        <p>
-          Website tarot đơn giản chạy trực tiếp trên Chrome: nhập câu hỏi, chọn số lá, xào bài,
-          bốc lá ngẫu nhiên với chiều thuận/ngược, rồi hiện phần giải nghĩa theo bộ dữ liệu có sẵn.
-        </p>
-        <div class="meta">
-          <span class="pill">78 lá</span>
-          <span class="pill">Random upright / reversed</span>
-          <span class="pill">Giữ lá đã rút</span>
-          <span class="pill">Expand reading</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="stats">
-          <div class="stat">
-            <div class="label">Đã rút</div>
-            <div class="value" id="usedCount">0</div>
-          </div>
-          <div class="stat">
-            <div class="label">Còn lại</div>
-            <div class="value" id="leftCount">78</div>
-          </div>
-          <div class="stat">
-            <div class="label">Số lần hỏi</div>
-            <div class="value" id="sessionCount">0</div>
-          </div>
-          <div class="stat">
-            <div class="label">Trạng thái</div>
-            <div class="value" id="statusText">Sẵn sàng</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="layout">
-      <aside class="panel">
-        <div class="group">
-          <label for="question">Câu hỏi</label>
-          <textarea id="question" placeholder="Ví dụ: Mối quan hệ này có tiến triển không?"></textarea>
-        </div>
-
-        <div class="group row">
-          <div>
-            <label for="count">Số lá</label>
-            <select id="count">
-              <option value="1">1 lá</option>
-              <option value="3" selected>3 lá</option>
-              <option value="5">5 lá</option>
-              <option value="7">7 lá</option>
-            </select>
-          </div>
-          <div>
-            <label for="mode">Chế độ</label>
-            <select id="mode">
-              <option value="initial" selected>Tụ bài ngưng</option>
-              <option value="expand">Tụ bài mở rộng</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="group btns">
-          <button class="primary" id="drawBtn">Xào & Bốc bài</button>
-          <button class="secondary" id="expandBtn">Bốc tiếp</button>
-        </div>
-
-        <div class="group btns">
-          <button class="secondary" id="resetBtn">Reset bộ bài</button>
-          <button class="danger" id="clearBtn">Xoá kết quả</button>
-        </div>
-
-        <div class="group">
-          <label for="notes">Ghi chú câu trả lời</label>
-          <textarea id="notes" placeholder="Chỗ này có thể nối sang API / RAG / NotebookLM-like nguồn data của bạn. Hiện tại app dùng knowledge base nội bộ để chạy offline."></textarea>
-        </div>
-
-        <div class="small">
-          Gợi ý: sau này bạn chỉ cần thay hàm <code>interpretReading()</code> bằng API của server hoặc RAG là xong.
-        </div>
-      </aside>
-
-      <main class="reading">
-        <div class="panel reading-head">
-          <div>
-            <h2>Kết quả</h2>
-            <div class="sub" id="summary">Chưa có lần bốc bài nào.</div>
-          </div>
-          <div class="meta">
-            <span class="pill" id="deckState">Deck: 78/78</span>
-            <span class="pill" id="lastMode">Mode: —</span>
-          </div>
-        </div>
-
-        <div id="result" class="spread"></div>
-        <div id="answerBox" class="panel empty">Nhập câu hỏi rồi bấm <strong>Xào & Bốc bài</strong>.</div>
-        <div class="panel" id="exportPanel" style="display:none;">
-          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
-            <strong>Text để copy vào NotebookLM</strong>
-            <button class="secondary" id="copyBtn" style="width:auto;">Copy text</button>
-          </div>
-          <textarea id="exportText" readonly style="min-height:220px;white-space:pre-wrap;"></textarea>
-        </div>
-      </main>
-    </section>
+<div class="app-container">
+  <div class="hero-section">
+    <div class="brand-card">
+      <h1>🌙 Tarot Reading</h1>
+      <div class="tagline">Rút bài theo trực giác — Xuất văn bản thuần túy cho NotebookLM</div>
+      <div class="tagline" style="font-size:0.7rem; margin-top:6px;">✨ Nhập thông tin, chọn số lá, xào & bốc bài. Kết quả được định dạng sẵn sàng copy.</div>
+    </div>
+    <div class="stats-card">
+      <div class="stat-item"><div class="stat-label">Đã rút</div><div class="stat-number" id="usedCount">0</div></div>
+      <div class="stat-item"><div class="stat-label">Còn lại</div><div class="stat-number" id="leftCount">78</div></div>
+      <div class="stat-item"><div class="stat-label">Phiên</div><div class="stat-number" id="sessionCount">0</div></div>
+      <div class="stat-item"><div class="stat-label">Trạng thái</div><div class="stat-number" id="statusText">✨ sẵn sàng</div></div>
+    </div>
   </div>
 
-  <script>
-    const majorArcana = [
-      "The Fool","The Magician","The High Priestess","The Empress","The Emperor","The Hierophant",
-      "The Lovers","The Chariot","Strength","The Hermit","Wheel of Fortune","Justice",
-      "The Hanged Man","Death","Temperance","The Devil","The Tower","The Star",
-      "The Moon","The Sun","Judgement","The World"
-    ];
-    const suits = [
-      { key:"Wands", element:"Lửa", domain:"ý chí, hành động, sáng tạo" },
-      { key:"Cups", element:"Nước", domain:"cảm xúc, quan hệ, trực giác" },
-      { key:"Swords", element:"Khí", domain:"tư duy, quyết định, xung đột" },
-      { key:"Pentacles", element:"Đất", domain:"vật chất, công việc, nền tảng" }
-    ];
-    const ranks = [
-      { key:"Ace", n:1, title:"Ace" },{ key:"Two", n:2, title:"Two" },{ key:"Three", n:3, title:"Three" },
-      { key:"Four", n:4, title:"Four" },{ key:"Five", n:5, title:"Five" },{ key:"Six", n:6, title:"Six" },
-      { key:"Seven", n:7, title:"Seven" },{ key:"Eight", n:8, title:"Eight" },{ key:"Nine", n:9, title:"Nine" },
-      { key:"Ten", n:10, title:"Ten" },{ key:"Page", n:11, title:"Page" },{ key:"Knight", n:12, title:"Knight" },
-      { key:"Queen", n:13, title:"Queen" },{ key:"King", n:14, title:"King" }
-    ];
+  <div class="two-columns">
+    <!-- Sidebar: nhập liệu -->
+    <div class="sidebar">
+      <div class="input-group">
+        <label>Họ và tên</label>
+        <input type="text" id="fullname" placeholder="Nguyễn Minh Anh" autocomplete="name">
+      </div>
+      <div class="input-group">
+        <label>Ngày sinh</label>
+        <input type="date" id="dob">
+      </div>
+      <div class="input-group">
+        <label>Số lượng lá</label>
+        <select id="countSelect">
+          <option value="1">1 lá — nhìn nhanh</option>
+          <option value="3" selected>3 lá — quá khứ / hiện tại / tương lai</option>
+          <option value="5">5 lá — chiều sâu vấn đề</option>
+          <option value="7">7 lá — mở rộng vận trình</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Câu hỏi / chủ đề</label>
+        <textarea id="questionInput" placeholder="Ví dụ: Sự nghiệp tháng tới ra sao? Mối quan hệ này có hướng đi tích cực không? ..."></textarea>
+      </div>
+      <div class="button-group">
+        <button id="profileBtn" class="btn-secondary">✨ Phân tích thông tin</button>
+        <button id="drawBtn" class="btn-primary">🃏 Xào & Bốc bài</button>
+      </div>
+      <div class="button-group">
+        <button id="nextBtn" class="btn-secondary">🔄 Hỏi tiếp (câu hỏi mới)</button>
+        <button id="resetBtn" class="btn-secondary">🗑️ Reset toàn bộ</button>
+      </div>
+      <div class="input-group">
+        <label>📋 Text cho NotebookLM (copy-paste)</label>
+        <textarea id="exportTextArea" readonly style="min-height: 200px; font-family: monospace; font-size: 0.75rem;" placeholder="Kết quả trải bài sẽ xuất hiện tại đây ..."></textarea>
+      </div>
+      <button id="copyExportBtn" class="btn-secondary" style="margin-top: 6px;">📋 Sao chép văn bản</button>
+      <div class="small-note">※ Mỗi lần bốc bài đều đảo bộ bài còn lại, xuôi/ngược ngẫu nhiên. Dữ liệu tarot chuẩn.</div>
+    </div>
 
-    const state = {
-      deck: [],
-      remaining: [],
-      used: [],
-      lastReading: [],
-      sessionCount: 0,
+    <!-- Khu vực hiển thị kết quả -->
+    <div class="main-panel">
+      <div class="profile-header">
+        <div><span class="pill" id="zodiacPill">♈ Cung: —</span> <span class="pill" id="namePill">Người hỏi: —</span></div>
+        <div><span class="pill" id="questionPreview">Câu hỏi: chưa đặt</span></div>
+      </div>
+      <div id="profileDetail" style="background:#0b0e16; border-radius:1rem; padding:0.8rem 1rem; margin-bottom:1rem; font-size:0.85rem;">
+        📖 Nhập họ tên + ngày sinh và bấm "Phân tích thông tin" để hiển thị cung hoàng đạo.
+      </div>
+
+      <div id="cardsContainer" class="cards-grid">
+        <!-- dynamic cards -->
+        <div style="text-align:center; color:#7e8aa2; grid-column:1/-1;">✨ Bấm "Xào & Bốc bài" để bắt đầu trải nghiệm ✨</div>
+      </div>
+
+      <div id="interpretationContainer" class="interpret-box">
+        <strong>🔮 Giải nghĩa tổng quan</strong>
+        <div id="readingSummary" style="margin-top: 8px; font-size:0.9rem;">Chưa có dữ liệu trải bài.</div>
+        <div id="detailedMeaning" style="margin-top: 12px; font-size:0.85rem; color:#cdd2e0;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- 1. Bộ bài Tarot hoàn chỉnh (Major + Minor) ----------
+  const majorArcana = [
+    "The Fool","The Magician","The High Priestess","The Empress","The Emperor","The Hierophant",
+    "The Lovers","The Chariot","Strength","The Hermit","Wheel of Fortune","Justice",
+    "The Hanged Man","Death","Temperance","The Devil","The Tower","The Star",
+    "The Moon","The Sun","Judgement","The World"
+  ];
+
+  const suitsData = [
+    { name: "Wands", domain: "hành động, sáng tạo, đam mê" },
+    { name: "Cups", domain: "cảm xúc, tình yêu, trực giác" },
+    { name: "Swords", domain: "tư duy, quyết định, thử thách" },
+    { name: "Pentacles", domain: "vật chất, công việc, thực tế" }
+  ];
+  const ranks = ["Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Page","Knight","Queen","King"];
+
+  // Từ điển ý nghĩa (upright / reversed)
+  const majorMeanings = {};
+  majorArcana.forEach(name => {
+    const uprightMap = {
+      "The Fool": "khởi đầu mới, ngây thơ, tự do", "The Magician": "ý chí, kỹ năng, biểu hiện", "The High Priestess": "trực giác, bí ẩn, nội tâm",
+      "The Empress": "nuôi dưỡng, sáng tạo, sinh sôi", "The Emperor": "cấu trúc, quyền lực, kỷ luật", "The Hierophant": "truyền thống, niềm tin, cố vấn",
+      "The Lovers": "kết nối, lựa chọn, hài hòa", "The Chariot": "kiểm soát, quyết tâm, chiến thắng", "Strength": "lòng can đảm, kiên nhẫn, sức mạnh nội tại",
+      "The Hermit": "chiêm nghiệm, hướng nội, tìm kiếm", "Wheel of Fortune": "vận mệnh, thay đổi, chu kỳ", "Justice": "công bằng, nhân quả, sự thật",
+      "The Hanged Man": "buông bỏ, góc nhìn mới, chờ đợi", "Death": "kết thúc, tái sinh, chuyển hóa", "Temperance": "cân bằng, kiên nhẫn, dung hòa",
+      "The Devil": "ràng buộc, cám dỗ, bóng tối", "The Tower": "đổ vỡ, thức tỉnh, bất ngờ", "The Star": "hy vọng, chữa lành, cảm hứng",
+      "The Moon": "ảo ảnh, tiềm thức, nghi ngờ", "The Sun": "thành công, niềm vui, rõ ràng", "Judgement": "tái sinh, tha thứ, kêu gọi", "The World": "hoàn thành, viên mãn, thành tựu"
     };
+    const reversedMap = {
+      "The Fool": "liều lĩnh, thiếu chuẩn bị, ngây dại", "The Magician": "thao túng, thiếu tập trung, tiềm năng chưa khai phá",
+      "The High Priestess": "bỏ qua trực giác, bí mật không lời", "The Empress": "thiếu chăm sóc, ỷ lại, thiếu sáng tạo",
+      "The Emperor": "độc đoán, thiếu linh hoạt, kiểm soát thái quá", "The Hierophant": "cứng nhắc, nổi loạn vô ích", "The Lovers": "mất kết nối, lưỡng lự, xung đột",
+      "The Chariot": "mất kiểm soát, hung hăng, thất bại tạm thời", "Strength": "yếu đuối, nghi ngờ bản thân, mất tự tin",
+      "The Hermit": "cô lập, trốn tránh, lạc lối", "Wheel of Fortune": "xui xẻo, trì trệ, kháng cự thay đổi", "Justice": "thiên vị, trốn tránh trách nhiệm",
+      "The Hanged Man": "trì hoãn, bế tắc, cố chấp", "Death": "kháng cự kết thúc, đau buồn kéo dài", "Temperance": "mất cân bằng, thiếu kiên nhẫn",
+      "The Devil": "nô lệ, nghiện ngập, ám ảnh", "The Tower": "thảm họa, chối bỏ sự thật, sụp đổ nội tại", "The Star": "mất niềm tin, thất vọng, tự ti",
+      "The Moon": "sợ hãi, ảo tưởng, lừa dối", "The Sun": "buồn bã, thiếu nhiệt huyết, tạm lắng", "Judgement": "tự phán xét khắc nghiệt, lạc lối lẽ phải",
+      "The World": "dang dở, thiếu khép lại, thiếu viên mãn"
+    };
+    majorMeanings[name] = { upright: uprightMap[name] || "biểu tượng mạnh mẽ", reversed: reversedMap[name] || "năng lượng bị chặn" };
+  });
 
-    const el = (id) => document.getElementById(id);
+  function getMinorMeaning(rank, suitName, domain, isUpright) {
+    const baseText = isUpright ? 
+      { Ace: `Khởi đầu mới thuộc ${domain}`, Two: `Cân bằng trong ${domain}`, Three: `Mở rộng hợp tác`, Four: `Ổn định, củng cố`, Five: `Xung đột, thử thách`, Six: `Hài hòa, hỗ trợ`, Seven: `Kiên trì, phòng thủ`, Eight: `Tiến triển nhanh`, Nine: `Tích lũy, gần đạt mục tiêu`, Ten: `Hoàn thành chu kỳ`, Page: `Tín hiệu mới, học hỏi`, Knight: `Hành động, xung lực`, Queen: `Làm chủ, thấu hiểu`, King: `Điều phối, chín chắn` } 
+      : { Ace: `Khởi đầu trì trệ trong ${domain}`, Two: `Mất cân bằng, lưỡng lự`, Three: `Thiếu phối hợp, chậm tiến`, Four: `Bế tắc, ì trệ`, Five: `Xung đột kéo dài`, Six: `Hỗ trợ không đúng lúc`, Seven: `Nghi ngờ, phòng thủ thái quá`, Eight: `Kẹt tiến độ`, Nine: `Căng thẳng, kiệt sức`, Ten: `Quá tải, kết thúc nặng nề`, Page: `Non nớt, thiếu tập trung`, Knight: `Hấp tấp, bốc đồng`, Queen: `Cạn kiệt cảm xúc`, King: `Cứng nhắc, độc tài` };
+    return baseText[rank] || `Ảnh hưởng ${isUpright ? 'tích cực' : 'tiêu cực'} trong ${domain}`;
+  }
 
-    function buildDeck() {
-      const deck = [];
-      majorArcana.forEach((name, idx) => {
-        deck.push({
-          id: `M${idx + 1}`,
-          name,
-          type: "Major",
-          arcana: idx + 1,
-          suit: null,
-          title: name,
-          upright: majorUpright(name),
-          reversed: majorReversed(name)
-        });
-      });
-      suits.forEach((suit) => {
-        ranks.forEach((rank) => {
-          const cardName = `${rank.title} of ${suit.key}`;
-          deck.push({
-            id: `${rank.key}_${suit.key}`,
-            name: cardName,
-            type: "Minor",
-            arcana: null,
-            suit: suit.key,
-            title: cardName,
-            upright: minorUpright(rank.key, suit.key, suit.domain),
-            reversed: minorReversed(rank.key, suit.key, suit.domain)
-          });
-        });
-      });
-      return deck;
-    }
-
-    function majorUpright(name) {
-      const map = {
-        "The Fool":"khởi đầu mới, tự do, niềm tin", "The Magician":"ý chí, kỹ năng, chủ động",
-        "The High Priestess":"trực giác, bí mật, lắng nghe", "The Empress":"nuôi dưỡng, sáng tạo, sung túc",
-        "The Emperor":"kỷ luật, cấu trúc, quyền lực", "The Hierophant":"truyền thống, học hỏi, hệ thống",
-        "The Lovers":"kết nối, lựa chọn, đồng điệu", "The Chariot":"tiến lên, kiểm soát, quyết tâm",
-        "Strength":"sức bền, dịu dàng, can đảm", "The Hermit":"chiêm nghiệm, tạm lùi, tìm câu trả lời",
-        "Wheel of Fortune":"chu kỳ, chuyển biến, cơ hội", "Justice":"công bằng, cân bằng, trách nhiệm",
-        "The Hanged Man":"đổi góc nhìn, chờ đợi, buông", "Death":"kết thúc cần thiết, tái sinh, chuyển pha",
-        "Temperance":"điều độ, hòa hợp, chữa lành", "The Devil":"ràng buộc, cám dỗ, phụ thuộc",
-        "The Tower":"đổ vỡ đột ngột, thật thà, phá khuôn", "The Star":"hy vọng, phục hồi, cảm hứng",
-        "The Moon":"mơ hồ, tiềm thức, bất an", "The Sun":"rõ ràng, thành công, sinh lực",
-        "Judgement":"thức tỉnh, đánh giá lại, gọi tên sự thật", "The World":"hoàn tất, viên mãn, mở chu kỳ mới"
-      };
-      return map[name] || "năng lượng tổng quan";
-    }
-
-    function majorReversed(name) {
-      const map = {
-        "The Fool":"liều lĩnh, thiếu chuẩn bị, phân tán", "The Magician":"lệch mục tiêu, thao túng, thiếu tập trung",
-        "The High Priestess":"bỏ qua trực giác, ẩn giấu, nhiễu", "The Empress":"cạn kiệt, trì trệ, tự chăm sóc kém",
-        "The Emperor":"cứng nhắc, kiểm soát quá mức, xung đột quyền lực", "The Hierophant":"lạc nhịp hệ thống, chống khuôn mẫu, niềm tin lung lay",
-        "The Lovers":"lệch pha, phân vân, thiếu cam kết", "The Chariot":"mất lái, áp lực, tiến mà không kiểm soát",
-        "Strength":"thiếu tự tin, cạn kiệt, bộc phát", "The Hermit":"cô lập, né tránh, khó nhìn rõ",
-        "Wheel of Fortune":"trì hoãn biến chuyển, mắc kẹt chu kỳ", "Justice":"thiên lệch, né trách nhiệm, bất cân bằng",
-        "The Hanged Man":"kẹt, cố chấp, không chịu đổi góc", "Death":"kháng cự kết thúc, kéo dài điều cũ", "Temperance":"quá đà, mất nhịp, thiếu điều hòa",
-        "The Devil":"phụ thuộc, ám ảnh, tự trói buộc", "The Tower":"kháng cự thay đổi, đổ vỡ bị dồn nén", "The Star":"mất hy vọng, tự nghi ngờ, chậm hồi phục",
-        "The Moon":"ảo tưởng, sợ hãi, nhìn sai", "The Sun":"phần sáng bị che, quá tự tin, trì trệ niềm vui",
-        "Judgement":"né gọi tên sự thật, do dự tái sinh", "The World":"chưa khép lại, dang dở, lặp vòng"
-      };
-      return map[name] || "năng lượng lệch";
-    }
-
-    function minorUpright(rank, suit, domain) {
-      const base = {
-        Ace:`khởi đầu mạnh về ${domain}`,
-        Two:`cân bằng hai lựa chọn trong ${domain}`,
-        Three:`mở rộng, hợp tác, đà phát triển`,
-        Four:`ổn định, dừng lại để củng cố`,
-        Five:`va chạm, thiếu hụt, thử thách`,
-        Six:`chuyển động hài hòa, nhận hỗ trợ`,
-        Seven:`kiên trì, phòng thủ, giữ lập trường`,
-        Eight:`tăng tốc, tiến triển nhanh`,
-        Nine:`sức bền, tích lũy, gần chạm mục tiêu`,
-        Ten:`đạt đỉnh, hoàn tất một vòng`,
-        Page:`tín hiệu mới, học hỏi, tò mò`,
-        Knight:`hành động, xung lực, theo đuổi`,
-        Queen:`thấu hiểu, làm chủ, nuôi dưỡng`,
-        King:`điều phối, chín chắn, trách nhiệm`
-      };
-      return `${base[rank]} trong ${domain}`;
-    }
-
-    function minorReversed(rank, suit, domain) {
-      const base = {
-        Ace:`bắt đầu chậm, cơ hội bị chặn trong ${domain}`,
-        Two:`mất cân bằng, phân tán giữa các lựa chọn`,
-        Three:`thiếu phối hợp, tiến độ chậm`,
-        Four:`ì trệ, bám chấp trạng thái cũ`,
-        Five:`xung đột kéo dài, hụt năng lượng`,
-        Six:`đi hỗ trợ nhưng chưa nhận đủ, lệch nhịp`,
-        Seven:`phòng thủ quá mức, nghi ngờ`,
-        Eight:`kẹt tiến độ, tốc độ bị chặn`,
-        Nine:`mệt mỏi, tích lũy căng thẳng`,
-        Ten:`quá tải, kết thúc nặng nề`,
-        Page:`non nớt, dễ xao nhãng, tín hiệu yếu`,
-        Knight:`hấp tấp, bốc đồng, thiếu bền`,
-        Queen:`cạn kiệt, rối cảm xúc hoặc mất trọng tâm`,
-        King:`cứng nhắc, kiểm soát quá tay, thiếu linh hoạt`
-      };
-      return `${base[rank]} trong ${domain}`;
-    }
-
-    function shuffle(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    function resetDeck() {
-      state.deck = buildDeck();
-      state.remaining = [...state.deck];
-      state.used = [];
-      state.lastReading = [];
-      updateStats();
-    }
-
-    function drawCards(count, mode) {
-      const pool = shuffle(state.remaining);
-      const picked = pool.slice(0, Math.min(count, pool.length)).map(card => ({
-        ...card,
-        orientation: Math.random() < 0.5 ? "upright" : "reversed"
-      }));
-      const pickedIds = new Set(picked.map(c => c.id));
-      state.remaining = state.remaining.filter(c => !pickedIds.has(c.id));
-      state.used = [...state.used, ...picked.map(c => c.id)];
-      state.lastReading = picked;
-      state.sessionCount += 1;
-      el("lastMode").textContent = `Mode: ${mode === "expand" ? "Tụ bài mở rộng" : "Tụ bài ngưng"}`;
-      updateStats();
-      return picked;
-    }
-
-    function interpretReading(question, cards, mode) {
-      // Đây là lớp dữ liệu nội bộ để chạy offline.
-      // Sau này bạn có thể thay bằng API / RAG / knowledge base riêng.
-      const opening = mode === "expand"
-        ? "Mạch đọc tiếp tục mở rộng từ các lá trước đó."
-        : "Mạch đọc ban đầu bám sát câu hỏi hiện tại.";
-
-      const cardLines = cards.map((c, idx) => {
-        const meaning = c.orientation === "upright" ? c.upright : c.reversed;
-        const direction = c.orientation === "upright" ? "thuận" : "ngược";
-        return `${idx + 1}. ${c.name} (${direction}) — ${meaning}`;
-      }).join("\n");
-
-      const blend = cards.map(c => {
-        const text = c.orientation === "upright" ? c.upright : c.reversed;
-        return text.split(",")[0];
-      }).join(" · ");
-
-      return {
-        title: mode === "expand" ? "Phần mở rộng" : "Phần giải bài",
-        summary: `${opening} Tông năng lượng nổi bật: ${blend}.`,
-        detail: `Câu hỏi: ${question || "(chưa nhập)"}\n\n${cardLines}`
-      };
-    }
-
-    function render(cards, question, mode) {
-      const result = el("result");
-      const answerBox = el("answerBox");
-      const interp = interpretReading(question, cards, mode);
-      const exportText = buildExportText(question, cards, mode, interp);
-
-      el("summary").textContent = question ? `Câu hỏi: ${question}` : "Chưa nhập câu hỏi, nhưng vẫn có thể bóc bài.";
-      el("statusText").textContent = cards.length ? "Đang đọc" : "Sẵn sàng";
-      el("deckState").textContent = `Deck: ${state.remaining.length}/78`;
-
-      if (!cards.length) {
-        el("exportPanel").style.display = "none";
-        el("exportText").value = "";
-        result.innerHTML = "";
-        answerBox.className = "panel empty";
-        answerBox.innerHTML = 'Nhập câu hỏi rồi bấm <strong>Xào & Bốc bài</strong>.';
-        return;
-      }
-
-      result.innerHTML = cards.map((c, i) => `
-        <article class="tarot-card">
-          <div>
-            <div class="top">
-              <div>
-                <div class="index">Lá ${i + 1} · ${c.type}${c.type === "Major" ? ` ${c.arcana}` : ` · ${c.suit}`}</div>
-                <div class="name">${c.name}</div>
-                <div class="ori">${c.orientation === "upright" ? "Thuận" : "Ngược"}</div>
-              </div>
-            </div>
-            <div class="body">${c.orientation === "upright" ? c.upright : c.reversed}</div>
-          </div>
-          <div class="kw">Từ khóa: ${cardKeywords(c)}</div>
-        </article>
-      `).join("");
-
-      answerBox.className = "panel";
-      answerBox.innerHTML = `
-        <h3 style="margin:0 0 8px; font-size:18px;">${interp.title}</h3>
-        <div class="small" style="white-space:pre-wrap; color:var(--text)">${escapeHtml(interp.summary)}\n\n${escapeHtml(interp.detail)}</div>
-      `;
-      el("exportPanel").style.display = "block";
-      el("exportText").value = exportText;
-    }
-
-    function cardKeywords(c) {
-      const base = c.orientation === "upright" ? c.upright : c.reversed;
-      return base.split(",").slice(0, 3).join(" · ");
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function drawFlow(mode) {
-      const count = Number(el("count").value);
-      const question = el("question").value.trim();
-      const cards = drawCards(count, mode);
-      render(cards, question, mode);
-    }
-
-    function expandFlow() {
-      const count = Number(el("count").value);
-      const question = el("question").value.trim();
-      if (!state.remaining.length) {
-        alert("Deck đã hết bài.");
-        return;
-      }
-      const cards = drawCards(count, "expand");
-      render(cards, question, "expand");
-    }
-
-    function clearResult() {
-      state.lastReading = [];
-      el("result").innerHTML = "";
-      el("answerBox").className = "panel empty";
-      el("answerBox").innerHTML = 'Nhập câu hỏi rồi bấm <strong>Xào & Bốc bài</strong>.';
-      el("summary").textContent = "Chưa có lần bốc bài nào.";
-      el("statusText").textContent = "Sẵn sàng";
-      el("lastMode").textContent = "Mode: —";
-    }
-
-    function buildExportText(question, cards, mode, interp) {
-      const lines = [];
-      lines.push(`RÚT BÀI TAROT`);
-      lines.push(`Câu hỏi: ${question || "(chưa nhập)"}`);
-      lines.push(`Số lá: ${cards.length}`);
-      lines.push(`Chế độ: ${mode === "expand" ? "Tụ bài mở rộng" : "Tụ bài ngưng"}`);
-      lines.push("");
-      lines.push(`KẾT QUẢ:`);
-      cards.forEach((c, i) => {
-        lines.push(`${i + 1}. ${c.name} (${c.orientation === "upright" ? "thuận" : "ngược"})`);
-      });
-      lines.push("");
-      lines.push(`GIẢI NGHĨA TÓM TẮT:`);
-      lines.push(interp.summary);
-      lines.push("");
-      lines.push(`CHI TIẾT:`);
-      lines.push(interp.detail);
-      return lines.join("\n");
-    }
-
-    function updateStats() {
-      el("usedCount").textContent = String(state.used.length);
-      el("leftCount").textContent = String(state.remaining.length);
-      el("sessionCount").textContent = String(state.sessionCount);
-      el("deckState").textContent = `Deck: ${state.remaining.length}/78`;
-    }
-
-    el("drawBtn").addEventListener("click", () => drawFlow(el("mode").value));
-    el("expandBtn").addEventListener("click", expandFlow);
-    el("resetBtn").addEventListener("click", () => { resetDeck(); clearResult(); });
-    el("clearBtn").addEventListener("click", clearResult);
-    el("copyBtn").addEventListener("click", async () => {
-      const text = el("exportText").value;
-      try {
-        await navigator.clipboard.writeText(text);
-        el("copyBtn").textContent = "Copied";
-        setTimeout(() => (el("copyBtn").textContent = "Copy text"), 1200);
-      } catch (e) {
-        alert("Không copy được. Bạn có thể bôi đen trong ô text rồi copy thủ công.");
-      }
+  function buildFullDeck() {
+    const deck = [];
+    majorArcana.forEach((name, idx) => {
+      deck.push({ id: `M${idx+1}`, name, type: "Major", suit: null, rank: null, meanings: majorMeanings[name] });
     });
+    suitsData.forEach(suit => {
+      ranks.forEach(rank => {
+        const cardName = `${rank} of ${suit.name}`;
+        deck.push({ 
+          id: `${rank}_${suit.name}`, name: cardName, type: "Minor", suit: suit.name, rank: rank,
+          meanings: {
+            upright: getMinorMeaning(rank, suit.name, suit.domain, true),
+            reversed: getMinorMeaning(rank, suit.name, suit.domain, false)
+          }
+        });
+      });
+    });
+    return deck;
+  }
 
-    resetDeck();
-    render([], "", "initial");
-  </script>
+  // ---------- 2. State quản lý ----------
+  let fullDeck = buildFullDeck();
+  let remainingCards = [...fullDeck];
+  let usedCardIds = [];
+  let currentSessionCards = [];     // lưu các lá vừa rút
+  let sessionCount = 0;
+  let currentProfile = null;        // { fullname, dob, zodiacSign, zodiacDesc }
+
+  // Zodiac
+  const zodiacList = [
+    { sign: "Bạch Dương", from: [3,21], to: [4,19], desc: "chủ động, tiên phong" },
+    { sign: "Kim Ngưu", from: [4,20], to: [5,20], desc: "kiên định, thực tế" },
+    { sign: "Song Tử", from: [5,21], to: [6,20], desc: "linh hoạt, tò mò" },
+    { sign: "Cự Giải", from: [6,21], to: [7,22], desc: "giàu cảm xúc, gia đình" },
+    { sign: "Sư Tử", from: [7,23], to: [8,22], desc: "tự tin, sáng tạo" },
+    { sign: "Xử Nữ", from: [8,23], to: [9,22], desc: "tỉ mỉ, phân tích" },
+    { sign: "Thiên Bình", from: [9,23], to: [10,22], desc: "cân bằng, hài hòa" },
+    { sign: "Bọ Cạp", from: [10,23], to: [11,21], desc: "sâu sắc, bí ẩn" },
+    { sign: "Nhân Mã", from: [11,22], to: [12,21], desc: "tự do, khám phá" },
+    { sign: "Ma Kết", from: [12,22], to: [1,19], desc: "kỷ luật, tham vọng" },
+    { sign: "Bảo Bình", from: [1,20], to: [2,18], desc: "độc đáo, nhân văn" },
+    { sign: "Song Ngư", from: [2,19], to: [3,20], desc: "trực giác, mộng mơ" }
+  ];
+  function getZodiacByDate(day, month) {
+    for (let z of zodiacList) {
+      let [m1, d1] = z.from;
+      let [m2, d2] = z.to;
+      if ((month === m1 && day >= d1) || (month === m2 && day <= d2) || (m1 > m2 && (month >= m1 || month <= m2))) {
+        if (m1 > m2) {
+          if (month >= m1 || month <= m2) return z;
+        } else if (month === m1 && day >= d1) return z;
+        else if (month === m2 && day <= d2) return z;
+        else if (month > m1 && month < m2) return z;
+      }
+    }
+    return zodiacList[0];
+  }
+
+  function updateUIStats() {
+    document.getElementById("usedCount").innerText = usedCardIds.length;
+    document.getElementById("leftCount").innerText = remainingCards.length;
+    document.getElementById("sessionCount").innerText = sessionCount;
+    document.getElementById("statusText").innerText = currentSessionCards.length ? "🔮 đã rút" : "✨ sẵn sàng";
+  }
+
+  function renderProfile() {
+    const fullname = document.getElementById("fullname").value.trim();
+    const dobStr = document.getElementById("dob").value;
+    if (!fullname || !dobStr) {
+      document.getElementById("profileDetail").innerHTML = "⚠️ Vui lòng nhập đủ họ tên và ngày sinh trước khi phân tích.";
+      document.getElementById("zodiacPill").innerHTML = "♎ Cung: —";
+      document.getElementById("namePill").innerHTML = "Người hỏi: —";
+      return null;
+    }
+    const dateObj = new Date(dobStr + "T00:00:00");
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const zodiac = getZodiacByDate(day, month);
+    currentProfile = { fullname, dob: dobStr, zodiacSign: zodiac.sign, zodiacDesc: zodiac.desc };
+    document.getElementById("profileDetail").innerHTML = `<span>🌟 <strong>${escapeHtml(fullname)}</strong> | sinh ${dobStr} | cung <strong>${zodiac.sign}</strong> (${zodiac.desc}) — tính cách: ${zodiac.sign === "Bạch Dương" ? "quyết đoán" : zodiac.sign === "Kim Ngưu" ? "vững vàng" : zodiac.sign === "Song Tử" ? "linh hoạt" : "có chiều sâu tương thích"} </span>`;
+    document.getElementById("zodiacPill").innerHTML = `♈ ${zodiac.sign} — ${zodiac.desc}`;
+    document.getElementById("namePill").innerHTML = `👤 ${fullname.split(" ").pop() || fullname}`;
+    return currentProfile;
+  }
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function drawCards(count) {
+    if (remainingCards.length === 0) {
+      alert("Bộ bài đã hết! Hãy Reset để chơi lại.");
+      return [];
+    }
+    const drawCount = Math.min(count, remainingCards.length);
+    const shuffledRemaining = shuffleArray([...remainingCards]);
+    const picked = shuffledRemaining.slice(0, drawCount).map(card => ({
+      ...card,
+      orientation: Math.random() < 0.5 ? "upright" : "reversed"
+    }));
+    const pickedIds = picked.map(c => c.id);
+    remainingCards = remainingCards.filter(c => !pickedIds.includes(c.id));
+    usedCardIds.push(...pickedIds);
+    currentSessionCards = picked;
+    sessionCount++;
+    updateUIStats();
+    return picked;
+  }
+
+  function generateReadingOutput(cards, question, profile) {
+    let cardLines = [];
+    cards.forEach((card, idx) => {
+      const meaningKey = card.orientation === "upright" ? "upright" : "reversed";
+      const meaningText = card.meanings[meaningKey];
+      const dirText = card.orientation === "upright" ? "Thuận" : "Ngược";
+      cardLines.push(`${idx+1}. ${card.name} (${dirText}) — ${meaningText}`);
+    });
+    const overallKeywords = cards.map(c => c.orientation === "upright" ? c.meanings.upright.split(",")[0] : c.meanings.reversed.split(",")[0]).join(" · ");
+    const detailText = cardLines.join("\n");
+    let profileBlock = "";
+    if (profile) {
+      profileBlock = `Người hỏi: ${profile.fullname}\nNgày sinh: ${profile.dob}\nCung hoàng đạo: ${profile.zodiacSign} — ${profile.zodiacDesc}\n`;
+    }
+    const finalText = `📜 TRẢI BÀI TAROT 📜
+${profileBlock}Câu hỏi / chủ đề: ${question || "(không có câu hỏi cụ thể)"}
+Số lượng lá: ${cards.length}
+
+【 KẾT QUẢ RÚT 】
+${cardLines.map(l => `• ${l}`).join("\n")}
+
+【 TỔNG QUAN NĂNG LƯỢNG 】
+${overallKeywords}
+
+【 GIẢI NGHĨA CHI TIẾT 】
+${detailText}
+
+✨ Thông điệp: Hãy nhìn vào sự kết hợp giữa các lá bài, lắng nghe trực giác. ✨
+`;
+    return { summary: `⚡ Từ khóa chính: ${overallKeywords}`, detail: detailText, fullExport: finalText };
+  }
+
+  function displayReading(cards, question) {
+    const container = document.getElementById("cardsContainer");
+    if (!cards.length) {
+      container.innerHTML = "<div style='grid-column:1/-1; text-align:center;'>⚠️ Không có lá nào, hãy reset hoặc bốc lại.</div>";
+      return;
+    }
+    container.innerHTML = cards.map((c, idx) => {
+      const orientationLabel = c.orientation === "upright" ? "🔼 Thuận" : "🔻 Ngược";
+      const meaningShort = c.orientation === "upright" ? c.meanings.upright : c.meanings.reversed;
+      return `
+        <div class="tarot-card-ui">
+          <div style="display:flex; justify-content:space-between;"><span>Lá ${idx+1}</span><span class="card-orient">${orientationLabel}</span></div>
+          <div class="card-name">${escapeHtml(c.name)}</div>
+          <div style="font-size:0.7rem; color:#b9aa7a;">${c.type === "Major" ? "Major Arcana" : `${c.suit}`}</div>
+          <div class="meaning-text">${escapeHtml(meaningShort)}</div>
+        </div>
+      `;
+    }).join("");
+    const output = generateReadingOutput(cards, question, currentProfile);
+    document.getElementById("readingSummary").innerHTML = output.summary;
+    document.getElementById("detailedMeaning").innerHTML = output.detail.replace(/\n/g, "<br>");
+    const exportArea = document.getElementById("exportTextArea");
+    exportArea.value = output.fullExport;
+  }
+
+  function resetEverything() {
+    fullDeck = buildFullDeck();
+    remainingCards = [...fullDeck];
+    usedCardIds = [];
+    currentSessionCards = [];
+    sessionCount = 0;
+    currentProfile = null;
+    document.getElementById("fullname").value = "";
+    document.getElementById("dob").value = "";
+    document.getElementById("questionInput").value = "";
+    document.getElementById("profileDetail").innerHTML = "📖 Nhập họ tên + ngày sinh và bấm 'Phân tích thông tin' để hiển thị cung hoàng đạo.";
+    document.getElementById("cardsContainer").innerHTML = "<div style='text-align:center; color:#7e8aa2; grid-column:1/-1;'>✨ Bấm 'Xào & Bốc bài' để bắt đầu trải nghiệm ✨</div>";
+    document.getElementById("readingSummary").innerHTML = "Chưa có dữ liệu trải bài.";
+    document.getElementById("detailedMeaning").innerHTML = "";
+    document.getElementById("exportTextArea").value = "";
+    document.getElementById("zodiacPill").innerHTML = "♈ Cung: —";
+    document.getElementById("namePill").innerHTML = "Người hỏi: —";
+    updateUIStats();
+  }
+
+  function drawFlow() {
+    let profile = currentProfile;
+    if (!profile) {
+      profile = renderProfile();
+      if (!profile) {
+        alert("Vui lòng nhập họ tên và ngày sinh trước khi bốc bài.");
+        return;
+      }
+    }
+    const count = parseInt(document.getElementById("countSelect").value, 10);
+    const question = document.getElementById("questionInput").value.trim();
+    if (remainingCards.length < count) {
+      alert(`Chỉ còn ${remainingCards.length} lá, không đủ để rút ${count} lá. Bạn có thể reset bộ bài.`);
+      return;
+    }
+    const drawn = drawCards(count);
+    if (drawn.length === 0) return;
+    displayReading(drawn, question);
+    document.getElementById("questionPreview").innerHTML = `📌 Hỏi: ${question.substring(0, 50) || "chưa có câu hỏi"}`;
+  }
+
+  function nextQuestion() {
+    const newQuestion = prompt("Nhập câu hỏi mới cho lần rút tiếp theo:", document.getElementById("questionInput").value || "");
+    if (newQuestion !== null) {
+      document.getElementById("questionInput").value = newQuestion;
+      drawFlow();
+    }
+  }
+
+  function copyToClipboard() {
+    const textArea = document.getElementById("exportTextArea");
+    if (!textArea.value.trim()) {
+      alert("Chưa có nội dung để copy. Hãy bốc bài trước.");
+      return;
+    }
+    navigator.clipboard.writeText(textArea.value).then(() => {
+      const btn = document.getElementById("copyExportBtn");
+      const original = btn.innerText;
+      btn.innerText = "✅ Đã copy!";
+      setTimeout(() => btn.innerText = original, 1500);
+    }).catch(() => alert("Có thể copy thủ công bằng Ctrl+C"));
+  }
+
+  function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
+
+  // attach events
+  document.getElementById("profileBtn").addEventListener("click", () => renderProfile());
+  document.getElementById("drawBtn").addEventListener("click", drawFlow);
+  document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+  document.getElementById("resetBtn").addEventListener("click", resetEverything);
+  document.getElementById("copyExportBtn").addEventListener("click", copyToClipboard);
+  resetEverything();
+</script>
 </body>
 </html>
