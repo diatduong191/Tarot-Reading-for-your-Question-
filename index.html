@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Tarot Oracle | Reading for NotebookLM</title>
+  <title>Tarot & Oracle - Lịch sử toàn tập | NotebookLM</title>
   <style>
     * {
       margin: 0;
@@ -12,29 +12,27 @@
     }
 
     body {
-      background: radial-gradient(circle at 10% 20%, rgba(30, 35, 48, 1) 0%, #0a0c14 100%);
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      background: radial-gradient(circle at 10% 20%, #1a1e2a 0%, #0a0c14 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       color: #edeef2;
       line-height: 1.5;
       padding: 2rem 1.5rem;
     }
 
-    /* container mềm mại */
     .app-container {
-      max-width: 1280px;
+      max-width: 1400px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 1.8rem;
     }
 
-    /* header + thông số */
+    /* Header */
     .hero-section {
       display: flex;
       flex-wrap: wrap;
       gap: 1.5rem;
       justify-content: space-between;
-      align-items: stretch;
     }
 
     .brand-card {
@@ -44,7 +42,6 @@
       border-radius: 2rem;
       padding: 1.6rem 2rem;
       flex: 2;
-      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
     }
 
     .stats-card {
@@ -68,14 +65,12 @@
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
-      letter-spacing: -0.01em;
       margin-bottom: 0.4rem;
     }
 
     .tagline {
       color: #9ca3af;
       font-size: 0.9rem;
-      margin-top: 0.3rem;
     }
 
     .stat-item {
@@ -94,17 +89,16 @@
       font-size: 1.8rem;
       font-weight: 700;
       color: #e2dccd;
-      line-height: 1.2;
     }
 
-    /* layout chính 2 cột */
+    /* Layout */
     .two-columns {
       display: grid;
       grid-template-columns: 340px 1fr;
       gap: 1.8rem;
     }
 
-    /* sidebar */
+    /* Sidebar */
     .sidebar {
       background: rgba(12, 16, 24, 0.75);
       backdrop-filter: blur(12px);
@@ -146,15 +140,11 @@
       box-shadow: 0 0 0 2px rgba(199, 167, 108, 0.2);
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
     .button-group {
       display: flex;
       gap: 0.8rem;
-      margin: 1.2rem 0;
+      margin: 1rem 0;
+      flex-wrap: wrap;
     }
 
     .btn-primary {
@@ -163,7 +153,6 @@
       color: #14181f;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.1s ease, box-shadow 0.2s;
     }
 
     .btn-primary:hover {
@@ -183,6 +172,18 @@
       border-color: #c7a76c;
     }
 
+    .btn-oracle {
+      background: linear-gradient(105deg, #7e5a7c, #5e3a5c);
+      border: none;
+      color: #f0e6f0;
+      font-weight: 600;
+    }
+
+    .btn-reset-session {
+      background: #2a2438;
+      border: 1px solid #5e4b6e;
+    }
+
     .small-note {
       font-size: 0.7rem;
       color: #7c8598;
@@ -190,7 +191,7 @@
       text-align: center;
     }
 
-    /* main content */
+    /* Main panel */
     .main-panel {
       background: rgba(12, 16, 24, 0.65);
       backdrop-filter: blur(8px);
@@ -204,8 +205,8 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
       border-bottom: 1px solid rgba(199, 167, 108, 0.3);
     }
 
@@ -229,7 +230,6 @@
       border-radius: 1.5rem;
       padding: 1rem;
       border: 1px solid #2d3343;
-      transition: all 0.2s;
     }
 
     .card-orient {
@@ -238,21 +238,18 @@
       background: #2a2e3c;
       padding: 0.2rem 0.6rem;
       border-radius: 30px;
-      margin-top: 0.4rem;
     }
 
     .card-name {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      letter-spacing: -0.2px;
       margin: 0.5rem 0 0.2rem;
     }
 
     .meaning-text {
       font-size: 0.8rem;
       color: #cbd5e6;
-      margin: 0.8rem 0;
-      line-height: 1.45;
+      margin: 0.6rem 0;
     }
 
     .interpret-box {
@@ -263,21 +260,35 @@
       border-left: 4px solid #c7a76c;
     }
 
+    .oracle-section {
+      background: #1a1424cc;
+      border-radius: 1.4rem;
+      padding: 1rem 1.3rem;
+      margin-top: 1rem;
+      border-left: 4px solid #b78c9e;
+    }
+
+    .history-log {
+      background: #0b0e16;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #b9c3da;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
     pre.export-area {
       background: #080b10;
       padding: 1rem;
       border-radius: 1.2rem;
       font-size: 0.75rem;
-      font-family: 'SF Mono', monospace;
+      font-family: monospace;
       white-space: pre-wrap;
       margin-top: 1rem;
-      border: 1px solid #2d2f3a;
-      max-height: 280px;
+      max-height: 300px;
       overflow-y: auto;
-    }
-
-    button:active {
-      transform: scale(0.98);
     }
 
     @media (max-width: 800px) {
@@ -287,9 +298,6 @@
       body {
         padding: 1rem;
       }
-      .stats-card {
-        justify-content: space-evenly;
-      }
     }
   </style>
 </head>
@@ -297,130 +305,150 @@
 <div class="app-container">
   <div class="hero-section">
     <div class="brand-card">
-      <h1>🌙 Tarot Reading</h1>
-      <div class="tagline">Rút bài theo trực giác — Xuất văn bản thuần túy cho NotebookLM</div>
-      <div class="tagline" style="font-size:0.7rem; margin-top:6px;">✨ Nhập thông tin, chọn số lá, xào & bốc bài. Kết quả được định dạng sẵn sàng copy.</div>
+      <h1>🌙 Tarot & Oracle · Toàn tập</h1>
+      <div class="tagline">Lưu trữ lịch sử toàn bộ câu hỏi & trả lời — Xuất văn bản hoàn chỉnh cho NotebookLM</div>
     </div>
     <div class="stats-card">
       <div class="stat-item"><div class="stat-label">Đã rút</div><div class="stat-number" id="usedCount">0</div></div>
       <div class="stat-item"><div class="stat-label">Còn lại</div><div class="stat-number" id="leftCount">78</div></div>
-      <div class="stat-item"><div class="stat-label">Phiên</div><div class="stat-number" id="sessionCount">0</div></div>
+      <div class="stat-item"><div class="stat-label">Số lượt</div><div class="stat-number" id="sessionCount">0</div></div>
       <div class="stat-item"><div class="stat-label">Trạng thái</div><div class="stat-number" id="statusText">✨ sẵn sàng</div></div>
     </div>
   </div>
 
   <div class="two-columns">
-    <!-- Sidebar: nhập liệu -->
+    <!-- Sidebar -->
     <div class="sidebar">
       <div class="input-group">
         <label>Họ và tên</label>
-        <input type="text" id="fullname" placeholder="Nguyễn Minh Anh" autocomplete="name">
+        <input type="text" id="fullname" placeholder="Nguyễn Minh Anh">
       </div>
       <div class="input-group">
         <label>Ngày sinh</label>
         <input type="date" id="dob">
       </div>
       <div class="input-group">
-        <label>Số lượng lá</label>
-        <select id="countSelect">
-          <option value="1">1 lá — nhìn nhanh</option>
-          <option value="3" selected>3 lá — quá khứ / hiện tại / tương lai</option>
-          <option value="5">5 lá — chiều sâu vấn đề</option>
-          <option value="7">7 lá — mở rộng vận trình</option>
-        </select>
+        <label>Số lượng lá Tarot</label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <select id="countSelect" style="flex:2;">
+            <option value="1">1 lá</option>
+            <option value="3" selected>3 lá</option>
+            <option value="5">5 lá</option>
+            <option value="7">7 lá</option>
+          </select>
+          <input type="number" id="customCount" min="1" max="12" placeholder="Tùy chỉnh" style="flex:1; text-align:center;">
+        </div>
+        <div class="small-note">Để trống tùy chỉnh sẽ dùng dropdown</div>
       </div>
       <div class="input-group">
-        <label>Câu hỏi / chủ đề</label>
-        <textarea id="questionInput" placeholder="Ví dụ: Sự nghiệp tháng tới ra sao? Mối quan hệ này có hướng đi tích cực không? ..."></textarea>
+        <label>Câu hỏi mới</label>
+        <textarea id="questionInput" placeholder="Nhập câu hỏi của bạn..."></textarea>
       </div>
       <div class="button-group">
         <button id="profileBtn" class="btn-secondary">✨ Phân tích thông tin</button>
-        <button id="drawBtn" class="btn-primary">🃏 Xào & Bốc bài</button>
+        <button id="drawBtn" class="btn-primary">🃏 Rút Tarot + Oracle</button>
       </div>
       <div class="button-group">
-        <button id="nextBtn" class="btn-secondary">🔄 Hỏi tiếp (câu hỏi mới)</button>
-        <button id="resetBtn" class="btn-secondary">🗑️ Reset toàn bộ</button>
+        <button id="nextBtn" class="btn-secondary">🎲 Hỏi tiếp (random số lá)</button>
+        <button id="newSessionBtn" class="btn-secondary btn-reset-session">🔄 Tụ bài mới</button>
+        <button id="oracleBtn" class="btn-oracle">🔮 Rút Oracle riêng</button>
       </div>
       <div class="input-group">
-        <label>📋 Text cho NotebookLM (copy-paste)</label>
-        <textarea id="exportTextArea" readonly style="min-height: 200px; font-family: monospace; font-size: 0.75rem;" placeholder="Kết quả trải bài sẽ xuất hiện tại đây ..."></textarea>
+        <label>📋 Text cho NotebookLM (toàn bộ lịch sử)</label>
+        <textarea id="exportTextArea" readonly style="min-height: 220px; font-family: monospace; font-size: 0.75rem;"></textarea>
       </div>
-      <button id="copyExportBtn" class="btn-secondary" style="margin-top: 6px;">📋 Sao chép văn bản</button>
-      <div class="small-note">※ Mỗi lần bốc bài đều đảo bộ bài còn lại, xuôi/ngược ngẫu nhiên. Dữ liệu tarot chuẩn.</div>
+      <button id="copyExportBtn" class="btn-secondary">📋 Sao chép văn bản</button>
+      <div class="small-note">※ Mỗi lần rút đều xào bài còn lại, xuôi/ngược ngẫu nhiên. Oracle luôn xuất hiện song song.</div>
     </div>
 
-    <!-- Khu vực hiển thị kết quả -->
+    <!-- Main content -->
     <div class="main-panel">
       <div class="profile-header">
         <div><span class="pill" id="zodiacPill">♈ Cung: —</span> <span class="pill" id="namePill">Người hỏi: —</span></div>
-        <div><span class="pill" id="questionPreview">Câu hỏi: chưa đặt</span></div>
+        <div><span class="pill" id="questionPreview">Câu hỏi hiện tại: —</span></div>
       </div>
       <div id="profileDetail" style="background:#0b0e16; border-radius:1rem; padding:0.8rem 1rem; margin-bottom:1rem; font-size:0.85rem;">
-        📖 Nhập họ tên + ngày sinh và bấm "Phân tích thông tin" để hiển thị cung hoàng đạo.
+        📖 Nhập họ tên + ngày sinh và bấm "Phân tích thông tin".
       </div>
 
+      <!-- Kết quả Tarot vừa rút -->
       <div id="cardsContainer" class="cards-grid">
-        <!-- dynamic cards -->
-        <div style="text-align:center; color:#7e8aa2; grid-column:1/-1;">✨ Bấm "Xào & Bốc bài" để bắt đầu trải nghiệm ✨</div>
+        <div style="text-align:center; color:#7e8aa2; grid-column:1/-1;">✨ Bấm "Rút Tarot + Oracle" để bắt đầu ✨</div>
       </div>
 
-      <div id="interpretationContainer" class="interpret-box">
-        <strong>🔮 Giải nghĩa tổng quan</strong>
-        <div id="readingSummary" style="margin-top: 8px; font-size:0.9rem;">Chưa có dữ liệu trải bài.</div>
+      <!-- Oracle hiển thị cùng kết quả -->
+      <div id="oracleContainer" class="oracle-section" style="display: none;">
+        <strong>🔮 Thông điệp Oracle (kèm theo)</strong>
+        <div id="oracleMessage" style="margin-top: 8px; font-size:0.9rem;"></div>
+      </div>
+
+      <div class="interpret-box">
+        <strong>📜 Giải nghĩa Tarot lượt này</strong>
+        <div id="readingSummary" style="margin-top: 8px; font-size:0.9rem;">Chưa có dữ liệu.</div>
         <div id="detailedMeaning" style="margin-top: 12px; font-size:0.85rem; color:#cdd2e0;"></div>
+      </div>
+
+      <!-- Lịch sử toàn bộ các câu hỏi & kết quả -->
+      <div class="history-log">
+        <strong>📚 Lịch sử toàn bộ câu hỏi & trả lời (theo thứ tự)</strong>
+        <div id="historyLogList" style="margin-top: 8px; font-size:0.7rem; max-height: 200px; overflow-y: auto;">Chưa có lượt rút nào.</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // ---------- 1. Bộ bài Tarot hoàn chỉnh (Major + Minor) ----------
+  // ==================== 1. Bộ bài TAROT ====================
   const majorArcana = [
     "The Fool","The Magician","The High Priestess","The Empress","The Emperor","The Hierophant",
     "The Lovers","The Chariot","Strength","The Hermit","Wheel of Fortune","Justice",
     "The Hanged Man","Death","Temperance","The Devil","The Tower","The Star",
     "The Moon","The Sun","Judgement","The World"
   ];
-
   const suitsData = [
-    { name: "Wands", domain: "hành động, sáng tạo, đam mê" },
-    { name: "Cups", domain: "cảm xúc, tình yêu, trực giác" },
-    { name: "Swords", domain: "tư duy, quyết định, thử thách" },
-    { name: "Pentacles", domain: "vật chất, công việc, thực tế" }
+    { name: "Wands", domain: "hành động, sáng tạo" },
+    { name: "Cups", domain: "cảm xúc, tình yêu" },
+    { name: "Swords", domain: "tư duy, thử thách" },
+    { name: "Pentacles", domain: "vật chất, thực tế" }
   ];
   const ranks = ["Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Page","Knight","Queen","King"];
 
-  // Từ điển ý nghĩa (upright / reversed)
   const majorMeanings = {};
   majorArcana.forEach(name => {
     const uprightMap = {
-      "The Fool": "khởi đầu mới, ngây thơ, tự do", "The Magician": "ý chí, kỹ năng, biểu hiện", "The High Priestess": "trực giác, bí ẩn, nội tâm",
-      "The Empress": "nuôi dưỡng, sáng tạo, sinh sôi", "The Emperor": "cấu trúc, quyền lực, kỷ luật", "The Hierophant": "truyền thống, niềm tin, cố vấn",
-      "The Lovers": "kết nối, lựa chọn, hài hòa", "The Chariot": "kiểm soát, quyết tâm, chiến thắng", "Strength": "lòng can đảm, kiên nhẫn, sức mạnh nội tại",
-      "The Hermit": "chiêm nghiệm, hướng nội, tìm kiếm", "Wheel of Fortune": "vận mệnh, thay đổi, chu kỳ", "Justice": "công bằng, nhân quả, sự thật",
-      "The Hanged Man": "buông bỏ, góc nhìn mới, chờ đợi", "Death": "kết thúc, tái sinh, chuyển hóa", "Temperance": "cân bằng, kiên nhẫn, dung hòa",
-      "The Devil": "ràng buộc, cám dỗ, bóng tối", "The Tower": "đổ vỡ, thức tỉnh, bất ngờ", "The Star": "hy vọng, chữa lành, cảm hứng",
-      "The Moon": "ảo ảnh, tiềm thức, nghi ngờ", "The Sun": "thành công, niềm vui, rõ ràng", "Judgement": "tái sinh, tha thứ, kêu gọi", "The World": "hoàn thành, viên mãn, thành tựu"
+      "The Fool": "khởi đầu mới, tự do, tiềm năng", "The Magician": "ý chí, kỹ năng, tập trung",
+      "The High Priestess": "trực giác, bí ẩn, nội tâm", "The Empress": "nuôi dưỡng, sáng tạo",
+      "The Emperor": "kỷ luật, quyền lực, cấu trúc", "The Hierophant": "truyền thống, cố vấn",
+      "The Lovers": "kết nối, lựa chọn, hài hòa", "The Chariot": "kiểm soát, quyết tâm",
+      "Strength": "can đảm, kiên nhẫn", "The Hermit": "chiêm nghiệm, hướng nội",
+      "Wheel of Fortune": "vận mệnh, thay đổi", "Justice": "công bằng, sự thật",
+      "The Hanged Man": "buông bỏ, góc nhìn mới", "Death": "kết thúc, tái sinh",
+      "Temperance": "cân bằng, dung hòa", "The Devil": "ràng buộc, cám dỗ",
+      "The Tower": "đổ vỡ, thức tỉnh", "The Star": "hy vọng, chữa lành",
+      "The Moon": "tiềm thức, ảo ảnh", "The Sun": "thành công, rạng rỡ",
+      "Judgement": "thức tỉnh, tha thứ", "The World": "hoàn thành, viên mãn"
     };
     const reversedMap = {
-      "The Fool": "liều lĩnh, thiếu chuẩn bị, ngây dại", "The Magician": "thao túng, thiếu tập trung, tiềm năng chưa khai phá",
-      "The High Priestess": "bỏ qua trực giác, bí mật không lời", "The Empress": "thiếu chăm sóc, ỷ lại, thiếu sáng tạo",
-      "The Emperor": "độc đoán, thiếu linh hoạt, kiểm soát thái quá", "The Hierophant": "cứng nhắc, nổi loạn vô ích", "The Lovers": "mất kết nối, lưỡng lự, xung đột",
-      "The Chariot": "mất kiểm soát, hung hăng, thất bại tạm thời", "Strength": "yếu đuối, nghi ngờ bản thân, mất tự tin",
-      "The Hermit": "cô lập, trốn tránh, lạc lối", "Wheel of Fortune": "xui xẻo, trì trệ, kháng cự thay đổi", "Justice": "thiên vị, trốn tránh trách nhiệm",
-      "The Hanged Man": "trì hoãn, bế tắc, cố chấp", "Death": "kháng cự kết thúc, đau buồn kéo dài", "Temperance": "mất cân bằng, thiếu kiên nhẫn",
-      "The Devil": "nô lệ, nghiện ngập, ám ảnh", "The Tower": "thảm họa, chối bỏ sự thật, sụp đổ nội tại", "The Star": "mất niềm tin, thất vọng, tự ti",
-      "The Moon": "sợ hãi, ảo tưởng, lừa dối", "The Sun": "buồn bã, thiếu nhiệt huyết, tạm lắng", "Judgement": "tự phán xét khắc nghiệt, lạc lối lẽ phải",
-      "The World": "dang dở, thiếu khép lại, thiếu viên mãn"
+      "The Fool": "liều lĩnh, thiếu chuẩn bị", "The Magician": "thao túng, thiếu tập trung",
+      "The High Priestess": "bỏ qua trực giác, bí mật", "The Empress": "thiếu chăm sóc, ỷ lại",
+      "The Emperor": "độc đoán, cứng nhắc", "The Hierophant": "cứng nhắc, nổi loạn",
+      "The Lovers": "mất kết nối, lưỡng lự", "The Chariot": "mất kiểm soát, hung hăng",
+      "Strength": "yếu đuối, thiếu tự tin", "The Hermit": "cô lập, trốn tránh",
+      "Wheel of Fortune": "xui xẻo, trì trệ", "Justice": "thiên vị, né tránh",
+      "The Hanged Man": "trì hoãn, bế tắc", "Death": "kháng cự kết thúc",
+      "Temperance": "mất cân bằng", "The Devil": "nô lệ, ám ảnh",
+      "The Tower": "thảm họa, chối bỏ", "The Star": "mất niềm tin",
+      "The Moon": "sợ hãi, ảo tưởng", "The Sun": "buồn bã, thiếu nhiệt",
+      "Judgement": "tự phán xét", "The World": "dang dở, thiếu khép lại"
     };
-    majorMeanings[name] = { upright: uprightMap[name] || "biểu tượng mạnh mẽ", reversed: reversedMap[name] || "năng lượng bị chặn" };
+    majorMeanings[name] = { upright: uprightMap[name] || "năng lượng mạnh", reversed: reversedMap[name] || "năng lượng bị chặn" };
   });
 
   function getMinorMeaning(rank, suitName, domain, isUpright) {
-    const baseText = isUpright ? 
-      { Ace: `Khởi đầu mới thuộc ${domain}`, Two: `Cân bằng trong ${domain}`, Three: `Mở rộng hợp tác`, Four: `Ổn định, củng cố`, Five: `Xung đột, thử thách`, Six: `Hài hòa, hỗ trợ`, Seven: `Kiên trì, phòng thủ`, Eight: `Tiến triển nhanh`, Nine: `Tích lũy, gần đạt mục tiêu`, Ten: `Hoàn thành chu kỳ`, Page: `Tín hiệu mới, học hỏi`, Knight: `Hành động, xung lực`, Queen: `Làm chủ, thấu hiểu`, King: `Điều phối, chín chắn` } 
-      : { Ace: `Khởi đầu trì trệ trong ${domain}`, Two: `Mất cân bằng, lưỡng lự`, Three: `Thiếu phối hợp, chậm tiến`, Four: `Bế tắc, ì trệ`, Five: `Xung đột kéo dài`, Six: `Hỗ trợ không đúng lúc`, Seven: `Nghi ngờ, phòng thủ thái quá`, Eight: `Kẹt tiến độ`, Nine: `Căng thẳng, kiệt sức`, Ten: `Quá tải, kết thúc nặng nề`, Page: `Non nớt, thiếu tập trung`, Knight: `Hấp tấp, bốc đồng`, Queen: `Cạn kiệt cảm xúc`, King: `Cứng nhắc, độc tài` };
-    return baseText[rank] || `Ảnh hưởng ${isUpright ? 'tích cực' : 'tiêu cực'} trong ${domain}`;
+    const base = isUpright ? 
+      { Ace:`Khởi đầu mới về ${domain}`, Two:`Cân bằng trong ${domain}`, Three:`Mở rộng hợp tác`, Four:`Ổn định, củng cố`, Five:`Thử thách, xung đột`, Six:`Hài hòa, hỗ trợ`, Seven:`Kiên trì, phòng thủ`, Eight:`Tiến triển nhanh`, Nine:`Tích lũy, gần thành`, Ten:`Hoàn thành chu kỳ`, Page:`Tín hiệu mới, học hỏi`, Knight:`Hành động, xung lực`, Queen:`Làm chủ, thấu hiểu`, King:`Điều phối, chín chắn`}
+      : { Ace:`Khởi đầu trì trệ`, Two:`Mất cân bằng`, Three:`Thiếu phối hợp`, Four:`Bế tắc`, Five:`Xung đột kéo dài`, Six:`Hỗ trợ sai thời điểm`, Seven:`Nghi ngờ`, Eight:`Kẹt tiến độ`, Nine:`Kiệt sức`, Ten:`Quá tải`, Page:`Non nớt`, Knight:`Hấp tấp`, Queen:`Cạn kiệt`, King:`Cứng nhắc`};
+    return base[rank] || `Ảnh hưởng ${isUpright ? 'tích cực' : 'tiêu cực'} trong ${domain}`;
   }
 
   function buildFullDeck() {
@@ -430,81 +458,76 @@
     });
     suitsData.forEach(suit => {
       ranks.forEach(rank => {
-        const cardName = `${rank} of ${suit.name}`;
         deck.push({ 
-          id: `${rank}_${suit.name}`, name: cardName, type: "Minor", suit: suit.name, rank: rank,
-          meanings: {
-            upright: getMinorMeaning(rank, suit.name, suit.domain, true),
-            reversed: getMinorMeaning(rank, suit.name, suit.domain, false)
-          }
+          id: `${rank}_${suit.name}`, name: `${rank} of ${suit.name}`, type: "Minor", suit: suit.name, rank: rank,
+          meanings: { upright: getMinorMeaning(rank, suit.name, suit.domain, true), reversed: getMinorMeaning(rank, suit.name, suit.domain, false) }
         });
       });
     });
     return deck;
   }
 
-  // ---------- 2. State quản lý ----------
+  // ==================== 2. Bộ Oracle ====================
+  const oracleDeck = [
+    { name: "🌿 Hạt giống mới", message: "Bạn đang ươm mầm cho một dự định quan trọng. Hãy kiên nhẫn tưới tắm." },
+    { name: "🕊️ Bồ câu hòa bình", message: "Tìm kiếm sự hòa giải trong lòng trước khi giải quyết xung đột bên ngoài." },
+    { name: "✨ Ánh trăng soi", message: "Trực giác của bạn rất nhạy bén tối nay. Hãy tin vào giấc mơ và cảm nhận." },
+    { name: "⚡ Cầu vồng sau bão", message: "Thử thách sắp qua, niềm vui và sự rõ ràng đang đến." },
+    { name: "🔑 Chìa khóa vàng", message: "Cơ hội mở ra ở nơi bạn ít ngờ nhất. Hãy sẵn sàng nắm bắt." },
+    { name: "🦉 Đêm thức tỉnh", message: "Nhìn vào bóng tối để tìm ra sự thật ẩn giấu. Sự khôn ngoan đến từ trải nghiệm." },
+    { name: "🔥 Ngọn lửa thiêng", message: "Đam mê và sáng tạo đang cháy bỏng. Hãy hành động dứt khoát." },
+    { name: "💧 Dòng suối tâm hồn", message: "Cảm xúc cần được thanh lọc. Hãy để nước mắt hoặc viết nhật ký." },
+    { name: "🌳 Cây cổ thụ", message: "Bạn có nền tảng vững chắc. Đừng sợ bám rễ sâu hơn để vươn xa." },
+    { name: "🎭 Mặt nạ", message: "Có điều gì đó đang được che giấu. Hãy nhìn thẳng vào sự thật." },
+    { name: "🌈 Bảy sắc cầu vồng", message: "Sự đa dạng và niềm vui sẽ đến. Hãy đón nhận những điều bất ngờ." },
+    { name: "⭐ Sao Bắc Đẩu", message: "Bạn đang đi đúng hướng. Hãy tiếp tục với niềm tin." }
+  ];
+
+  function drawOracle() {
+    const randomIndex = Math.floor(Math.random() * oracleDeck.length);
+    return oracleDeck[randomIndex];
+  }
+
+  // ==================== 3. State & Helper ====================
   let fullDeck = buildFullDeck();
   let remainingCards = [...fullDeck];
   let usedCardIds = [];
-  let currentSessionCards = [];     // lưu các lá vừa rút
+  let sessionHistory = []; // mỗi phần tử: { question, cardsData, oracle, timestamp }
+  let currentProfile = null;
   let sessionCount = 0;
-  let currentProfile = null;        // { fullname, dob, zodiacSign, zodiacDesc }
+  let lastDrawCards = [];
 
-  // Zodiac
-  const zodiacList = [
-    { sign: "Bạch Dương", from: [3,21], to: [4,19], desc: "chủ động, tiên phong" },
-    { sign: "Kim Ngưu", from: [4,20], to: [5,20], desc: "kiên định, thực tế" },
-    { sign: "Song Tử", from: [5,21], to: [6,20], desc: "linh hoạt, tò mò" },
-    { sign: "Cự Giải", from: [6,21], to: [7,22], desc: "giàu cảm xúc, gia đình" },
-    { sign: "Sư Tử", from: [7,23], to: [8,22], desc: "tự tin, sáng tạo" },
-    { sign: "Xử Nữ", from: [8,23], to: [9,22], desc: "tỉ mỉ, phân tích" },
-    { sign: "Thiên Bình", from: [9,23], to: [10,22], desc: "cân bằng, hài hòa" },
-    { sign: "Bọ Cạp", from: [10,23], to: [11,21], desc: "sâu sắc, bí ẩn" },
-    { sign: "Nhân Mã", from: [11,22], to: [12,21], desc: "tự do, khám phá" },
-    { sign: "Ma Kết", from: [12,22], to: [1,19], desc: "kỷ luật, tham vọng" },
-    { sign: "Bảo Bình", from: [1,20], to: [2,18], desc: "độc đáo, nhân văn" },
-    { sign: "Song Ngư", from: [2,19], to: [3,20], desc: "trực giác, mộng mơ" }
-  ];
-  function getZodiacByDate(day, month) {
-    for (let z of zodiacList) {
-      let [m1, d1] = z.from;
-      let [m2, d2] = z.to;
-      if ((month === m1 && day >= d1) || (month === m2 && day <= d2) || (m1 > m2 && (month >= m1 || month <= m2))) {
-        if (m1 > m2) {
-          if (month >= m1 || month <= m2) return z;
-        } else if (month === m1 && day >= d1) return z;
-        else if (month === m2 && day <= d2) return z;
-        else if (month > m1 && month < m2) return z;
-      }
+  function getZodiac(day, month) {
+    const zodiacs = [
+      { sign: "Bạch Dương", from: [3,21], to: [4,19], desc: "chủ động" }, { sign: "Kim Ngưu", from: [4,20], to: [5,20], desc: "kiên định" },
+      { sign: "Song Tử", from: [5,21], to: [6,20], desc: "linh hoạt" }, { sign: "Cự Giải", from: [6,21], to: [7,22], desc: "cảm xúc" },
+      { sign: "Sư Tử", from: [7,23], to: [8,22], desc: "tự tin" }, { sign: "Xử Nữ", from: [8,23], to: [9,22], desc: "tỉ mỉ" },
+      { sign: "Thiên Bình", from: [9,23], to: [10,22], desc: "cân bằng" }, { sign: "Bọ Cạp", from: [10,23], to: [11,21], desc: "sâu sắc" },
+      { sign: "Nhân Mã", from: [11,22], to: [12,21], desc: "tự do" }, { sign: "Ma Kết", from: [12,22], to: [1,19], desc: "kỷ luật" },
+      { sign: "Bảo Bình", from: [1,20], to: [2,18], desc: "độc đáo" }, { sign: "Song Ngư", from: [2,19], to: [3,20], desc: "trực giác" }
+    ];
+    for (let z of zodiacs) {
+      let [m1, d1] = z.from, [m2, d2] = z.to;
+      if ((month === m1 && day >= d1) || (month === m2 && day <= d2) || (m1 > m2 && (month >= m1 || month <= m2))) return z;
     }
-    return zodiacList[0];
-  }
-
-  function updateUIStats() {
-    document.getElementById("usedCount").innerText = usedCardIds.length;
-    document.getElementById("leftCount").innerText = remainingCards.length;
-    document.getElementById("sessionCount").innerText = sessionCount;
-    document.getElementById("statusText").innerText = currentSessionCards.length ? "🔮 đã rút" : "✨ sẵn sàng";
+    return zodiacs[0];
   }
 
   function renderProfile() {
     const fullname = document.getElementById("fullname").value.trim();
     const dobStr = document.getElementById("dob").value;
     if (!fullname || !dobStr) {
-      document.getElementById("profileDetail").innerHTML = "⚠️ Vui lòng nhập đủ họ tên và ngày sinh trước khi phân tích.";
-      document.getElementById("zodiacPill").innerHTML = "♎ Cung: —";
+      document.getElementById("profileDetail").innerHTML = "⚠️ Vui lòng nhập đủ họ tên và ngày sinh.";
+      document.getElementById("zodiacPill").innerHTML = "♈ Cung: —";
       document.getElementById("namePill").innerHTML = "Người hỏi: —";
       return null;
     }
-    const dateObj = new Date(dobStr + "T00:00:00");
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const zodiac = getZodiacByDate(day, month);
+    const date = new Date(dobStr + "T00:00:00");
+    const zodiac = getZodiac(date.getDate(), date.getMonth()+1);
     currentProfile = { fullname, dob: dobStr, zodiacSign: zodiac.sign, zodiacDesc: zodiac.desc };
-    document.getElementById("profileDetail").innerHTML = `<span>🌟 <strong>${escapeHtml(fullname)}</strong> | sinh ${dobStr} | cung <strong>${zodiac.sign}</strong> (${zodiac.desc}) — tính cách: ${zodiac.sign === "Bạch Dương" ? "quyết đoán" : zodiac.sign === "Kim Ngưu" ? "vững vàng" : zodiac.sign === "Song Tử" ? "linh hoạt" : "có chiều sâu tương thích"} </span>`;
+    document.getElementById("profileDetail").innerHTML = `🌟 <strong>${escapeHtml(fullname)}</strong> | sinh ${dobStr} | cung <strong>${zodiac.sign}</strong> (${zodiac.desc})`;
     document.getElementById("zodiacPill").innerHTML = `♈ ${zodiac.sign} — ${zodiac.desc}`;
-    document.getElementById("namePill").innerHTML = `👤 ${fullname.split(" ").pop() || fullname}`;
+    document.getElementById("namePill").innerHTML = `👤 ${fullname.split(" ").pop()}`;
     return currentProfile;
   }
 
@@ -516,62 +539,94 @@
     return arr;
   }
 
-  function drawCards(count) {
-    if (remainingCards.length === 0) {
-      alert("Bộ bài đã hết! Hãy Reset để chơi lại.");
-      return [];
-    }
-    const drawCount = Math.min(count, remainingCards.length);
-    const shuffledRemaining = shuffleArray([...remainingCards]);
-    const picked = shuffledRemaining.slice(0, drawCount).map(card => ({
+  function getDrawCount() {
+    let custom = document.getElementById("customCount").value;
+    if (custom && !isNaN(custom) && custom >= 1 && custom <= 12) return parseInt(custom);
+    return parseInt(document.getElementById("countSelect").value);
+  }
+
+  function drawTarotCards(count) {
+    if (remainingCards.length === 0) { alert("Bộ bài đã hết! Hãy bấm 'Tụ bài mới' để xào lại."); return []; }
+    const drawNum = Math.min(count, remainingCards.length);
+    const shuffled = shuffleArray([...remainingCards]);
+    const picked = shuffled.slice(0, drawNum).map(card => ({
       ...card,
       orientation: Math.random() < 0.5 ? "upright" : "reversed"
     }));
     const pickedIds = picked.map(c => c.id);
     remainingCards = remainingCards.filter(c => !pickedIds.includes(c.id));
     usedCardIds.push(...pickedIds);
-    currentSessionCards = picked;
     sessionCount++;
-    updateUIStats();
     return picked;
   }
 
-  function generateReadingOutput(cards, question, profile) {
-    let cardLines = [];
-    cards.forEach((card, idx) => {
-      const meaningKey = card.orientation === "upright" ? "upright" : "reversed";
-      const meaningText = card.meanings[meaningKey];
-      const dirText = card.orientation === "upright" ? "Thuận" : "Ngược";
-      cardLines.push(`${idx+1}. ${card.name} (${dirText}) — ${meaningText}`);
-    });
-    const overallKeywords = cards.map(c => c.orientation === "upright" ? c.meanings.upright.split(",")[0] : c.meanings.reversed.split(",")[0]).join(" · ");
-    const detailText = cardLines.join("\n");
-    let profileBlock = "";
-    if (profile) {
-      profileBlock = `Người hỏi: ${profile.fullname}\nNgày sinh: ${profile.dob}\nCung hoàng đạo: ${profile.zodiacSign} — ${profile.zodiacDesc}\n`;
-    }
-    const finalText = `📜 TRẢI BÀI TAROT 📜
-${profileBlock}Câu hỏi / chủ đề: ${question || "(không có câu hỏi cụ thể)"}
-Số lượng lá: ${cards.length}
-
-【 KẾT QUẢ RÚT 】
-${cardLines.map(l => `• ${l}`).join("\n")}
-
-【 TỔNG QUAN NĂNG LƯỢNG 】
-${overallKeywords}
-
-【 GIẢI NGHĨA CHI TIẾT 】
-${detailText}
-
-✨ Thông điệp: Hãy nhìn vào sự kết hợp giữa các lá bài, lắng nghe trực giác. ✨
-`;
-    return { summary: `⚡ Từ khóa chính: ${overallKeywords}`, detail: detailText, fullExport: finalText };
+  function updateUIStats() {
+    document.getElementById("usedCount").innerText = usedCardIds.length;
+    document.getElementById("leftCount").innerText = remainingCards.length;
+    document.getElementById("sessionCount").innerText = sessionHistory.length;
+    document.getElementById("statusText").innerText = sessionHistory.length ? "🔮 đã rút" : "✨ sẵn sàng";
   }
 
-  function displayReading(cards, question) {
+  function generateFullHistoryText() {
+    if (!currentProfile && sessionHistory.length === 0) return "Chưa có dữ liệu.";
+    let lines = [];
+    lines.push("🔮 TỔNG HỢP TRẢI BÀI TAROT & ORACLE 🔮");
+    if (currentProfile) {
+      lines.push(`Người hỏi: ${currentProfile.fullname} | Ngày sinh: ${currentProfile.dob} | Cung: ${currentProfile.zodiacSign} (${currentProfile.zodiacDesc})`);
+    } else {
+      lines.push("Người hỏi: chưa xác định");
+    }
+    lines.push(`Tổng số lượt hỏi: ${sessionHistory.length}`);
+    lines.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    
+    sessionHistory.forEach((item, idx) => {
+      lines.push(`\n【 LƯỢT ${idx+1} 】`);
+      lines.push(`Câu hỏi: ${item.question || "(không có câu hỏi)"}`);
+      lines.push(`Số lá Tarot: ${item.cardsData.length}`);
+      lines.push(`Oracle: ${item.oracle.name} — ${item.oracle.message}`);
+      lines.push(`\nCác lá Tarot:`);
+      item.cardsData.forEach((card, i) => {
+        const dir = card.orientation === "upright" ? "Thuận" : "Ngược";
+        const meaning = card.orientation === "upright" ? card.meanings.upright : card.meanings.reversed;
+        lines.push(`  ${i+1}. ${card.name} (${dir}): ${meaning}`);
+      });
+      lines.push(`\nTừ khóa chính: ${item.keywords}`);
+      lines.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    });
+    lines.push("\n✨ Lời khuyên: Hãy xem xét sự thay đổi năng lượng qua các lượt để có cái nhìn toàn diện.");
+    return lines.join("\n");
+  }
+
+  function addToHistory(question, cards, oracle) {
+    const keywords = cards.map(c => c.orientation === "upright" ? c.meanings.upright.split(",")[0] : c.meanings.reversed.split(",")[0]).join(" · ");
+    sessionHistory.push({
+      question: question,
+      cardsData: cards.map(c => ({ ...c })), // clone
+      oracle: { name: oracle.name, message: oracle.message },
+      keywords: keywords,
+      timestamp: new Date()
+    });
+    updateUIStats();
+    // Cập nhật hiển thị lịch sử trong sidebar
+    const historyDiv = document.getElementById("historyLogList");
+    let historyHtml = "";
+    sessionHistory.slice().reverse().forEach((item, idx) => {
+      const num = sessionHistory.length - idx;
+      historyHtml += `<div style="margin-bottom: 8px; border-bottom: 1px solid #2a2e3a; padding-bottom: 6px;">
+        <strong>Lượt ${num}</strong> - ${item.question?.substring(0, 60) || "không câu hỏi"}<br>
+        <span style="color:#bcae7c;">${item.cardsData.length} lá · Oracle: ${item.oracle.name}</span>
+      </div>`;
+    });
+    if (sessionHistory.length === 0) historyHtml = "Chưa có lượt rút nào.";
+    historyDiv.innerHTML = historyHtml;
+    // Cập nhật export text
+    document.getElementById("exportTextArea").value = generateFullHistoryText();
+  }
+
+  function displayCurrentReading(cards, oracle, question) {
     const container = document.getElementById("cardsContainer");
     if (!cards.length) {
-      container.innerHTML = "<div style='grid-column:1/-1; text-align:center;'>⚠️ Không có lá nào, hãy reset hoặc bốc lại.</div>";
+      container.innerHTML = "<div style='grid-column:1/-1;'>⚠️ Không có lá, hãy tụ bài mới.</div>";
       return;
     }
     container.innerHTML = cards.map((c, idx) => {
@@ -581,90 +636,106 @@ ${detailText}
         <div class="tarot-card-ui">
           <div style="display:flex; justify-content:space-between;"><span>Lá ${idx+1}</span><span class="card-orient">${orientationLabel}</span></div>
           <div class="card-name">${escapeHtml(c.name)}</div>
-          <div style="font-size:0.7rem; color:#b9aa7a;">${c.type === "Major" ? "Major Arcana" : `${c.suit}`}</div>
           <div class="meaning-text">${escapeHtml(meaningShort)}</div>
         </div>
       `;
     }).join("");
-    const output = generateReadingOutput(cards, question, currentProfile);
-    document.getElementById("readingSummary").innerHTML = output.summary;
-    document.getElementById("detailedMeaning").innerHTML = output.detail.replace(/\n/g, "<br>");
-    const exportArea = document.getElementById("exportTextArea");
-    exportArea.value = output.fullExport;
+    const summary = cards.map(c => c.orientation === "upright" ? c.meanings.upright.split(",")[0] : c.meanings.reversed.split(",")[0]).join(" · ");
+    const detail = cards.map((c,i) => `${i+1}. ${c.name} (${c.orientation==="upright"?"Thuận":"Ngược"}): ${c.orientation==="upright"?c.meanings.upright:c.meanings.reversed}`).join("\n");
+    document.getElementById("readingSummary").innerHTML = `⚡ Từ khóa chính: ${summary}`;
+    document.getElementById("detailedMeaning").innerHTML = detail.replace(/\n/g, "<br>");
+    
+    const oracleDiv = document.getElementById("oracleContainer");
+    oracleDiv.style.display = "block";
+    document.getElementById("oracleMessage").innerHTML = `<strong>${oracle.name}</strong><br>${oracle.message}`;
+    
+    document.getElementById("questionPreview").innerHTML = `📌 Câu hỏi: ${question?.substring(0, 60) || "chưa có"}`;
+    lastDrawCards = cards;
   }
 
-  function resetEverything() {
-    fullDeck = buildFullDeck();
-    remainingCards = [...fullDeck];
-    usedCardIds = [];
-    currentSessionCards = [];
-    sessionCount = 0;
-    currentProfile = null;
-    document.getElementById("fullname").value = "";
-    document.getElementById("dob").value = "";
-    document.getElementById("questionInput").value = "";
-    document.getElementById("profileDetail").innerHTML = "📖 Nhập họ tên + ngày sinh và bấm 'Phân tích thông tin' để hiển thị cung hoàng đạo.";
-    document.getElementById("cardsContainer").innerHTML = "<div style='text-align:center; color:#7e8aa2; grid-column:1/-1;'>✨ Bấm 'Xào & Bốc bài' để bắt đầu trải nghiệm ✨</div>";
-    document.getElementById("readingSummary").innerHTML = "Chưa có dữ liệu trải bài.";
-    document.getElementById("detailedMeaning").innerHTML = "";
-    document.getElementById("exportTextArea").value = "";
-    document.getElementById("zodiacPill").innerHTML = "♈ Cung: —";
-    document.getElementById("namePill").innerHTML = "Người hỏi: —";
-    updateUIStats();
-  }
-
-  function drawFlow() {
+  function performDraw(isRandomCount = false) {
     let profile = currentProfile;
     if (!profile) {
       profile = renderProfile();
-      if (!profile) {
-        alert("Vui lòng nhập họ tên và ngày sinh trước khi bốc bài.");
-        return;
-      }
+      if (!profile) { alert("Vui lòng nhập họ tên và ngày sinh trước khi rút bài."); return; }
     }
-    const count = parseInt(document.getElementById("countSelect").value, 10);
+    let count = getDrawCount();
+    if (isRandomCount) {
+      count = Math.floor(Math.random() * 7) + 1;
+      document.getElementById("customCount").value = "";
+      document.getElementById("countSelect").value = count;
+    }
     const question = document.getElementById("questionInput").value.trim();
-    if (remainingCards.length < count) {
-      alert(`Chỉ còn ${remainingCards.length} lá, không đủ để rút ${count} lá. Bạn có thể reset bộ bài.`);
-      return;
-    }
-    const drawn = drawCards(count);
-    if (drawn.length === 0) return;
-    displayReading(drawn, question);
-    document.getElementById("questionPreview").innerHTML = `📌 Hỏi: ${question.substring(0, 50) || "chưa có câu hỏi"}`;
+    const cards = drawTarotCards(count);
+    if (cards.length === 0) return;
+    const oracle = drawOracle();
+    // Hiển thị kết quả vừa rút
+    displayCurrentReading(cards, oracle, question);
+    // Lưu vào lịch sử
+    addToHistory(question, cards, oracle);
   }
 
-  function nextQuestion() {
-    const newQuestion = prompt("Nhập câu hỏi mới cho lần rút tiếp theo:", document.getElementById("questionInput").value || "");
-    if (newQuestion !== null) {
-      document.getElementById("questionInput").value = newQuestion;
-      drawFlow();
+  function showOracleOnly() {
+    const oracle = drawOracle();
+    document.getElementById("oracleContainer").style.display = "block";
+    document.getElementById("oracleMessage").innerHTML = `<strong>${oracle.name}</strong><br>${oracle.message}`;
+    // Thêm vào export text như một ghi chú riêng? Không thêm vào lịch sử chính.
+    let currentExport = document.getElementById("exportTextArea").value;
+    const newNote = `\n\n🔮 ORACLE RIÊNG (không thuộc lượt hỏi): ${oracle.name} — ${oracle.message}`;
+    document.getElementById("exportTextArea").value = currentExport + newNote;
+  }
+
+  function resetSession() {
+    // Reset toàn bộ bộ bài, lịch sử, nhưng giữ thông tin cá nhân (profile) và các trường nhập liệu (fullname, dob vẫn giữ)
+    fullDeck = buildFullDeck();
+    remainingCards = [...fullDeck];
+    usedCardIds = [];
+    sessionHistory = [];
+    sessionCount = 0;
+    lastDrawCards = [];
+    // Không reset currentProfile, vẫn giữ
+    // Cập nhật giao diện
+    document.getElementById("cardsContainer").innerHTML = "<div style='text-align:center; color:#7e8aa2; grid-column:1/-1;'>✨ Bấm 'Rút Tarot + Oracle' để bắt đầu phiên mới ✨</div>";
+    document.getElementById("readingSummary").innerHTML = "Chưa có dữ liệu.";
+    document.getElementById("detailedMeaning").innerHTML = "";
+    document.getElementById("oracleContainer").style.display = "none";
+    document.getElementById("historyLogList").innerHTML = "Chưa có lượt rút nào.";
+    document.getElementById("exportTextArea").value = "";
+    document.getElementById("questionPreview").innerHTML = "Câu hỏi hiện tại: —";
+    updateUIStats();
+    // Hiển thị lại thông tin profile nếu có
+    if (currentProfile) {
+      document.getElementById("profileDetail").innerHTML = `🌟 <strong>${escapeHtml(currentProfile.fullname)}</strong> | sinh ${currentProfile.dob} | cung <strong>${currentProfile.zodiacSign}</strong> (${currentProfile.zodiacDesc})`;
+      document.getElementById("zodiacPill").innerHTML = `♈ ${currentProfile.zodiacSign} — ${currentProfile.zodiacDesc}`;
+      document.getElementById("namePill").innerHTML = `👤 ${currentProfile.fullname.split(" ").pop()}`;
+    } else {
+      // nếu chưa có profile thì không sao
     }
   }
 
-  function copyToClipboard() {
-    const textArea = document.getElementById("exportTextArea");
-    if (!textArea.value.trim()) {
-      alert("Chưa có nội dung để copy. Hãy bốc bài trước.");
-      return;
-    }
-    navigator.clipboard.writeText(textArea.value).then(() => {
+  function copyExport() {
+    const text = document.getElementById("exportTextArea").value;
+    if (!text) { alert("Chưa có nội dung để copy."); return; }
+    navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById("copyExportBtn");
-      const original = btn.innerText;
+      const orig = btn.innerText;
       btn.innerText = "✅ Đã copy!";
-      setTimeout(() => btn.innerText = original, 1500);
-    }).catch(() => alert("Có thể copy thủ công bằng Ctrl+C"));
+      setTimeout(() => btn.innerText = orig, 1500);
+    });
   }
 
-  function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
+  function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-  // attach events
-  document.getElementById("profileBtn").addEventListener("click", () => renderProfile());
-  document.getElementById("drawBtn").addEventListener("click", drawFlow);
-  document.getElementById("nextBtn").addEventListener("click", nextQuestion);
-  document.getElementById("resetBtn").addEventListener("click", resetEverything);
-  document.getElementById("copyExportBtn").addEventListener("click", copyToClipboard);
-  resetEverything();
+  // Event listeners
+  document.getElementById("profileBtn").addEventListener("click", renderProfile);
+  document.getElementById("drawBtn").addEventListener("click", () => performDraw(false));
+  document.getElementById("nextBtn").addEventListener("click", () => performDraw(true));
+  document.getElementById("newSessionBtn").addEventListener("click", resetSession);
+  document.getElementById("oracleBtn").addEventListener("click", showOracleOnly);
+  document.getElementById("copyExportBtn").addEventListener("click", copyExport);
+  
+  // Khởi tạo
+  resetSession();
 </script>
 </body>
 </html>
